@@ -15,12 +15,8 @@ class SpecciDev < Formula
   depends_on "rust" => :build
 
   def install
-    # Build the CLI from the CLI crate manifest inside the workspace.
-    system "cargo", "build", "--release", "--manifest-path", "crates/cli/Cargo.toml"
-
-    # In a Cargo workspace, all targets share a single top-level `target/` dir.
-    # The `specci` binary will be at `target/release/specci` relative to the workspace root.
-    bin.install "target/release/specci"
+    # Use Homebrew's standard Cargo arguments and point at the CLI crate in the workspace
+    system "cargo", "install", *std_cargo_args(path: "crates/cli")
   end
 
   test do
