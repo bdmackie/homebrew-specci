@@ -17,9 +17,9 @@ class SpecciDev < Formula
     depends_on "rust" => :build
   
     def install
-      # Build the CLI (workspace root is the current directory in Homebrew build)
-      system "cargo", "build", "--release", "--package", "specci-cli"
-  
+      # Build the CLI binary named "specci" from the workspace
+      system "cargo", "build", "--release", "--bin", "specci"
+    
       # Install the built binary into Homebrew's bin directory
       bin.install "target/release/specci"
     end
