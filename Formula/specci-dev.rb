@@ -1,8 +1,10 @@
 class SpecciDev < Formula
-  # Allow overriding the SSH host via environment variable. Defaults to "github-specci".
   HOST = ENV.fetch("SPECCI_GITHUB_HOST", "github-specci")
 
-  desc "Specci CLI – dev build from HEAD"
+  # One-line human description
+  desc "Specci CLI – spec-driven development helper"
+
+  # Project homepage (GitHub repo is fine to start)
   homepage "https://github.com/bdmackie/specci-client"
 
   # Build from the git repository via SSH at the head of the main (or dev) branch
@@ -15,7 +17,7 @@ class SpecciDev < Formula
   depends_on "rust" => :build
 
   def install
-    # Use Homebrew's standard Cargo arguments and point at the CLI crate in the workspace
+    # Build and install the CLI from the crates/cli crate
     system "cargo", "install", *std_cargo_args(path: "crates/cli")
   end
 
