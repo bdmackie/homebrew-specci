@@ -1,28 +1,33 @@
 class Specci < Formula
-    # One-line human description
-    desc "Specci CLI – spec-driven development helper"
-  
-    # Project homepage (GitHub repo is fine to start)
-    homepage "https://github.com/bdmackie/specci-client"
-  
-    # These two lines are replaced per release using the data from the Python script
-    url "https://api.github.com/repos/bdmackie/specci-client/tarball/v0.1.0"
-    sha256 "d444cb32aa12a70cea96c75afe7ff3061ff3a1eaa478ad3b467fb04e24f51981"
-  
-    # License identifier
-    license "MIT"
-  
-    # Build-time dependency on Rust/Cargo
-    depends_on "rust" => :build
-  
-    def install
-      # Build and install the CLI from the crates/cli crate
-      system "cargo", "install", *std_cargo_args(path: "crates/cli")
-    end
-  
-    test do
-      # Smoke test: ensure the binary runs and prints help
-      output = shell_output("#{bin}/specci --help")
-      assert_match "specci", output
-    end
+  # Allow overriding the SSH host via environment variable. Defaults to "github-specci".
+  HOST = ENV.fetch("SPECCI_GITHUB_HOST", "github-specci")
+
+  # One-line human description
+  desc "Specci CLI – spec-driven development helper"
+
+  # Project homepage (GitHub repo is fine to start)
+  homepage "https://github.com/bdmackie/specci-client"
+
+  # Build from the git repository via SSH at a specific tag.
+  # The SSH host can be overridden with SPECCI_GITHUB_HOST; default is "github-specci".
+  url "git@#{HOST}:bdmackie/specci-client.git",
+      using: :git,
+      tag: "v0.1.0"
+
+  # License identifier
+  license "MIT"
+
+  # Build-time dependency on Rust/Cargo
+  depends_on "rust" => :build
+
+  def install
+    # Build and install the CLI from the crates/cli crate
+    system "cargo", "install", *std_cargo_args(path: "crates/cli")
   end
+
+  test do
+    # Smoke test: ensure the binary runs and prints help
+    output = shell_output("#{bin}/specci --help")
+    assert_match "specci", output
+  end
+end
