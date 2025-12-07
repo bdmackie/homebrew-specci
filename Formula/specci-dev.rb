@@ -17,11 +17,11 @@ class SpecciDev < Formula
     depends_on "rust" => :build
   
     def install
-      # Build the CLI in release mode from the workspace
+      # Build the CLI in release mode, using the CLI crate as the manifest root
       system "cargo", "build", "--release", "--manifest-path", "crates/cli/Cargo.toml"
     
-      # Install the resulting binary into Homebrew's bin
-      bin.install "target/release/specci"
+      # Install the resulting binary from the CLI crate's target directory
+      bin.install "crates/cli/target/release/specci"
     end
   
     test do
