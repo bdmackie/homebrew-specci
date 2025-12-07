@@ -22,7 +22,7 @@ class SpecciDev < Formula
   end
 
   test do
-    output = shell_output("#{bin}/specci --help")
-    assert_match "specci", output
+    output = shell_output("#{bin}/specci-dev --help")
+    assert_match "specci-dev", output
   end
 end
