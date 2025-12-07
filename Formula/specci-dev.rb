@@ -18,7 +18,7 @@ class SpecciDev < Formula
 
   def install
     # Build and install the CLI from the crates/cli crate
-    system "cargo", "install", *std_cargo_args(path: "crates/cli")
+    system "cargo", "install", *std_cargo_args(path: "crates/cli", bin: "specci-dev")
   end
 
   test do
