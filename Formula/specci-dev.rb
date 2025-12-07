@@ -15,10 +15,11 @@ class SpecciDev < Formula
   depends_on "rust" => :build
 
   def install
-    # Build the CLI binary named "specci" from the workspace
-    system "cargo", "build", "--release", "--bin", "specci"
+    # Build the CLI from the CLI crate manifest inside the workspace.
+    system "cargo", "build", "--release", "--manifest-path", "crates/cli/Cargo.toml"
 
-    # Install the built binary into Homebrew's bin directory
+    # In a Cargo workspace, all targets share a single top-level `target/` dir.
+    # The `specci` binary will be at `target/release/specci` relative to the workspace root.
     bin.install "target/release/specci"
   end
 
