@@ -6,8 +6,8 @@ class Specci < Formula
     homepage "https://github.com/bdmackie/specci-client"
   
     # These two lines are replaced per release using the data from the Python script
-    url "https://github.com/bdmackie/specci-client/archive/refs/tags/v0.1.0.tar.gz"
-    sha256 "ABC123...YOUR_REAL_SHA_HERE..."
+    url "https://api.github.com/repos/bdmackie/specci-client/tarball/v0.1.0"
+    sha256 "d444cb32aa12a70cea96c75afe7ff3061ff3a1eaa478ad3b467fb04e24f51981"
   
     # License identifier
     license "MIT"
