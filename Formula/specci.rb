@@ -15,7 +15,7 @@ class Specci < Formula
       tag: "v0.1.0"
 
   # License identifier
-  license "MIT"
+  license "Proprietary"
 
   # Build-time dependency on Rust/Cargo
   depends_on "rust" => :build

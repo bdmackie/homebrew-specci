@@ -14,7 +14,7 @@ class Specci < Formula
     sha256 "d444cb32aa12a70cea96c75afe7ff3061ff3a1eaa478ad3b467fb04e24f51981"
   
     # License identifier
-    license "MIT"
+    license "Proprietary"
   
     # Build-time dependency on Rust/Cargo
     depends_on "rust" => :build
