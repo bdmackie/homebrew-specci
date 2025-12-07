@@ -17,7 +17,11 @@ class SpecciDev < Formula
     depends_on "rust" => :build
   
     def install
-      system "cargo", "install", *std_cargo_args(path: "crates/cli")
+        system "cargo", "install",
+               "--locked",
+               "--root", prefix,
+               "--path", "crates/cli",
+               "--force"
     end
   
     test do
