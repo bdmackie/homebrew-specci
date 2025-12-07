@@ -90,6 +90,18 @@ def main() -> None:
     )
     args = parser.parse_args()
 
+    # Abort if the repo has pending changes (both staged or unstaged)
+    try:
+        status = run(["git", "status", "--porcelain"], capture_output=True)
+    except subprocess.CalledProcessError:
+        print("Error: Failed to check git status.", file=sys.stderr)
+        sys.exit(1)
+
+    if status.stdout.strip():
+        print("Error: Your working tree has pending changes.", file=sys.stderr)
+        print("Commit or stash them before running publish.py.", file=sys.stderr)
+        sys.exit(1)
+
     ensure_formula_exists()
     update_formula(args.version)
     show_diff()
