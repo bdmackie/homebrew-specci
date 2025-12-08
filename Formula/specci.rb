@@ -13,6 +13,8 @@ class Specci < Formula
   url "https://api.github.com/repos/bdmackie/specci-client/tarball/v0.1.3",
       using: :git,
       branch: "main"
+  sha256 "d444cb32aa12a70cea96c75afe7ff3061ff3a1eaa478ad3b467fb04e24f51981"
+  
   # License identifier
   license "Proprietary"
 
