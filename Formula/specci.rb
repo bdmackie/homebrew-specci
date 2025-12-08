@@ -12,7 +12,7 @@ class Specci < Formula
   # The SSH host can be overridden with SPECCI_GITHUB_HOST; default is "github-specci".
   url "https://api.github.com/repos/bdmackie/specci-client/tarball/v0.1.3",
       using: :git
-
+      branch: "main"
   # License identifier
   license "Proprietary"
 
