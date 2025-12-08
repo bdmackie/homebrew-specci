@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -8,7 +9,7 @@ from pathlib import Path
 TOOLS_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(TOOLS_DIR))
 
-from update_formula import update_formula_ssh as update_formula_func
+from update_formula import update_formula_https as update_formula_func
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -63,6 +64,68 @@ def confirm(prompt: str) -> bool:
     return answer in ("y", "yes")
 
 
+def get_tap_name() -> str:
+    """Get the tap name from git remote (e.g., bdmackie/specci)."""
+    result = run(["git", "remote", "get-url", "origin"], capture_output=True)
+    remote = result.stdout.strip()
+    
+    # Handle both SSH (git@host:owner/repo.git) and HTTPS (https://github.com/owner/repo.git)
+    if remote.startswith("git@"):
+        parts = remote.split(":")[-1].replace(".git", "")
+    elif remote.startswith("https://"):
+        parts = remote.split("github.com/")[-1].replace(".git", "")
+    else:
+        raise ValueError(f"Unknown remote format: {remote}")
+    
+    owner, repo = parts.split("/", 1)
+    # homebrew-specci -> specci
+    tap_name = repo.replace("homebrew-", "")
+    return f"{owner}/{tap_name}"
+
+
+def verify_formula_online(version: str) -> None:
+    """Verify the formula is updated by checking with brew."""
+    print("\n== Verifying formula online ==")
+    
+    try:
+        tap_name = get_tap_name()
+    except Exception as e:
+        print(f"⚠️  Could not determine tap name: {e}", file=sys.stderr)
+        print("   Run manually: brew info specci")
+        return
+    
+    try:
+        # Update the tap first to get latest changes
+        print(f"Updating tap: {tap_name}")
+        run(["brew", "update", tap_name], check=False)
+        
+        # Get formula info
+        print(f"Checking formula version...")
+        result = run(["brew", "info", "specci"], capture_output=True, check=False)
+        info_output = result.stdout
+        
+        expected_tag = f"v{version}"
+        if expected_tag in info_output:
+            print(f"✅ Formula is updated online (tag {expected_tag} found)")
+        else:
+            # Try to extract tag from output
+            tag_match = re.search(r'tag:\s+"([^"]+)"', info_output)
+            if tag_match:
+                online_tag = tag_match.group(1)
+                if online_tag == expected_tag:
+                    print(f"✅ Formula is updated online (tag {online_tag})")
+                else:
+                    print(f"⚠️  Formula shows tag '{online_tag}', expected '{expected_tag}'")
+            else:
+                print(f"⚠️  Could not verify tag in brew output")
+                print("   Run manually: brew info specci")
+    except FileNotFoundError:
+        print("⚠️  'brew' command not found, skipping online verification")
+    except Exception as e:
+        print(f"⚠️  Error checking formula: {e}", file=sys.stderr)
+        print("   Run manually: brew info specci")
+
+
 def commit_and_push(version: str) -> None:
     print("\n== Committing and pushing changes ==")
     try:
@@ -81,6 +144,7 @@ def commit_and_push(version: str) -> None:
         sys.exit(e.returncode)
     else:
         print("✅ Changes committed and pushed.")
+        update_formula_func(version)
 
 
 def main() -> None:
@@ -107,6 +171,7 @@ def main() -> None:
 
     ensure_formula_exists()
     update_formula(args.version)
+    verify_formula_update(args.version)
     show_diff()
 
     if not confirm("\nCommit and push these changes to origin?"):

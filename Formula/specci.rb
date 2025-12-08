@@ -1,6 +1,7 @@
 class Specci < Formula
-  # Allow overriding the SSH host via environment variable. Defaults to "github-specci".
-  HOST = ENV.fetch("SPECCI_GITHUB_HOST", "github-specci")
+  # NOTE: This formula file uses HTTPS which is the standard for public repositories.
+  # When Specci is released more publicly (either just the releases or the repo is open sourced)
+  # we can use this approach.
 
   # One-line human description
   desc "Specci CLI – spec-driven development helper"
@@ -8,11 +9,9 @@ class Specci < Formula
   # Project homepage (GitHub repo is fine to start)
   homepage "https://github.com/bdmackie/specci-client"
 
-  # Build from the git repository via SSH at a specific tag.
-  # The SSH host can be overridden with SPECCI_GITHUB_HOST; default is "github-specci".
-  url "https://api.github.com/repos/bdmackie/specci-client/tarball/v0.1.2",
-      using: :git,
-      tag: "v0.1.2"
+  # These two lines are replaced per release using the data from the Python script
+  url "https://api.github.com/repos/bdmackie/specci-client/tarball/v0.1.0"
+  sha256 "d444cb32aa12a70cea96c75afe7ff3061ff3a1eaa478ad3b467fb04e24f51981"
 
   # License identifier
   license "Proprietary"
