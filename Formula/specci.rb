@@ -12,7 +12,7 @@ class Specci < Formula
   # The SSH host can be overridden with SPECCI_GITHUB_HOST; default is "github-specci".
   url "https://github.com/bdmackie/specci-client.git",
       using: :git,
-      tag: "v0.1.6"
+      tag: "v0.1.7"
   
   # License identifier
   license "Proprietary"
