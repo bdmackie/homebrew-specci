@@ -144,7 +144,7 @@ def commit_and_push(version: str) -> None:
         sys.exit(e.returncode)
     else:
         print("✅ Changes committed and pushed.")
-        update_formula_func(version)
+        verify_formula_online(version)
 
 
 def main() -> None:
@@ -171,7 +171,6 @@ def main() -> None:
 
     ensure_formula_exists()
     update_formula(args.version)
-    verify_formula_update(args.version)
     show_diff()
 
     if not confirm("\nCommit and push these changes to origin?"):

@@ -84,7 +84,7 @@ def main() -> None:
 
     print()
     version = sys.argv[1]
-    update_formula(version)
+    update_formula_https(version)
     print()
 
 if __name__ == "__main__":
