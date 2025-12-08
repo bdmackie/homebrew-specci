@@ -22,14 +22,9 @@ class Specci < Formula
   # Override download to add GitHub token authentication
   def download
     token = ENV["SPECCI_CLIENT_GITHUB_TOKEN"] || ENV["HOMEBREW_GITHUB_API_TOKEN"]
-    if token
-      ohai "Using GitHub token for authentication"
-      # Download with curl and Authorization header
-      system "curl", "-f", "-L", "-H", "Authorization: Bearer #{token}", url, "-o", cached_download
-      raise "Download failed" unless $CHILD_STATUS.success?
-    else
-      super
-    end
+    # Download with curl and Authorization header
+    system "curl", "-f", "-L", "-H", "Authorization: Bearer #{token}", url, "-o", cached_download
+    raise "Download failed" unless $CHILD_STATUS.success?
   end
 
   # License identifier
