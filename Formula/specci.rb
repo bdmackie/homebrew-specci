@@ -1,17 +1,3 @@
-# Custom download strategy for GitHub API with token support
-class GitHubApiDownloadStrategy < CurlDownloadStrategy
-  def curl_args(*args, **options)
-    args = super
-    token = ENV["SPECCI_CLIENT_GITHUB_TOKEN"] || ENV["HOMEBREW_GITHUB_API_TOKEN"]
-    if token
-      ohai "Using GitHub token for authentication"
-      # Add Authorization header to curl args
-      args += ["-H", "Authorization: Bearer #{token}"]
-    end
-    args
-  end
-end
-
 class Specci < Formula
   # NOTE: This formula file uses HTTPS which is the standard for public repositories.
   # When Specci is released more publicly (either just the releases or the repo is open sourced)
@@ -30,9 +16,21 @@ class Specci < Formula
   homepage "https://github.com/bdmackie/specci-client"
 
   # These two lines are replaced per release using the data from the Python script
-  url "https://api.github.com/repos/bdmackie/specci-client/tarball/v0.1.2",
-      using: GitHubApiDownloadStrategy
+  url "https://api.github.com/repos/bdmackie/specci-client/tarball/v0.1.2"
   sha256 "4942f649df6073eb1e3305234141cf6b1e3ff23e8dd7f8c29c83f0b58f33a2f6"
+
+  # Override download to add GitHub token authentication
+  def download
+    token = ENV["SPECCI_CLIENT_GITHUB_TOKEN"] || ENV["HOMEBREW_GITHUB_API_TOKEN"]
+    if token
+      ohai "Using GitHub token for authentication"
+      # Download with curl and Authorization header
+      system "curl", "-f", "-L", "-H", "Authorization: Bearer #{token}", url, "-o", cached_download
+      raise "Download failed" unless $CHILD_STATUS.success?
+    else
+      super
+    end
+  end
 
   # License identifier
   license "Proprietary"
