@@ -13,6 +13,7 @@ class Specci < Formula
   url "https://api.github.com/repos/bdmackie/specci-client/tarball/v0.1.3",
       using: :git,
       tag: "v0.1.3"
+      branch: "main"
 
   # License identifier
   license "Proprietary"
