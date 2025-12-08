@@ -23,4 +23,11 @@ class Specci < Formula
   def install
     # Build and install the CLI from the crates/cli crate
     system "cargo", "install", *std_cargo_args(path: "crates/cli")
+  end
+
+  test do
+    # Smoke test: ensure the binary runs and prints help
+    output = shell_output("#{bin}/specci --help")
+    assert_match "specci", output
+  end
 end
