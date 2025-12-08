@@ -1,7 +1,24 @@
+# Custom download strategy for GitHub API with token support
+class GitHubApiDownloadStrategy < AbstractDownloadStrategy
+  def fetch(timeout: nil, **options)
+    token = ENV["SPECCI_CLIENT_GITHUB_TOKEN"] || ENV["HOMEBREW_GITHUB_API_TOKEN"]
+    curl_args = []
+    curl_args += ["-H", "Authorization: Bearer #{token}"] if token
+    
+    curl_download(url, **options.merge(args: curl_args))
+  end
+end
+
 class Specci < Formula
   # NOTE: This formula file uses HTTPS which is the standard for public repositories.
   # When Specci is released more publicly (either just the releases or the repo is open sourced)
   # we can use this approach.
+  #
+  # For private repositories, set one of these environment variables before installing:
+  #   export HOMEBREW_GITHUB_API_TOKEN="your_github_token_here"
+  #   # OR
+  #   export SPECCI_CLIENT_GITHUB_TOKEN="your_github_token_here"
+  #   brew install specci
 
   # One-line human description
   desc "Specci CLI – spec-driven development helper"
@@ -10,7 +27,8 @@ class Specci < Formula
   homepage "https://github.com/bdmackie/specci-client"
 
   # These two lines are replaced per release using the data from the Python script
-  url "https://api.github.com/repos/bdmackie/specci-client/tarball/v0.1.2"
+  url "https://api.github.com/repos/bdmackie/specci-client/tarball/v0.1.2",
+      using: GitHubApiDownloadStrategy
   sha256 "4942f649df6073eb1e3305234141cf6b1e3ff23e8dd7f8c29c83f0b58f33a2f6"
 
   # License identifier
