@@ -18,18 +18,28 @@ def update_formula_ssh(version: str, formula_path: pathlib.Path | None = None) -
     if not formula_path.exists():
         raise SystemExit(f"Formula not found at {formula_path}")
 
+    url = f"https://github.com/bdmackie/specci-client.git"
+    tag = f"v{version}"
+
     text = formula_path.read_text()
+
+    # Replace url line
+    text = re.sub(
+        r'url "[^"]+"',
+        f'url "{url}"',
+        text,
+    )
 
     # Replace sha256 line
     text = re.sub(
         r'tag: "[^"]+"',
-        f'tag: "v{version}"',
+        f'tag: "{tag}"',
         text,
     )
 
     formula_path.write_text(text)
     print(f"Updated {formula_path} to version {version}")
-    print(f"  tag: v{version}")
+    print(f"  tag: {tag}")
 
 
 def update_formula_https(version: str, formula_path: pathlib.Path | None = None) -> None:
