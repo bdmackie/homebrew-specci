@@ -13,7 +13,6 @@ class Specci < Formula
   url "https://github.com/bdmackie/specci-client.git",
       using: :git,
       tag: "v0.1.4"
-  sha256 "4755bde25d732df47ff5d82b328cd127852fbf9713e5182735bc7e832e39b8f0"
   
   # License identifier
   license "Proprietary"
