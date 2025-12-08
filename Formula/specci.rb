@@ -10,7 +10,7 @@ class Specci < Formula
 
   # Build from the git repository via SSH at a specific tag.
   # The SSH host can be overridden with SPECCI_GITHUB_HOST; default is "github-specci".
-  url "git@#{HOST}:bdmackie/specci-client.git",
+  url "https://api.github.com/repos/bdmackie/specci-client/tarball/v0.1.2",
       using: :git,
       tag: "v0.1.0"
 
