@@ -82,33 +82,6 @@ def get_tap_name() -> str:
     tap_name = repo.replace("homebrew-", "")
     return f"{owner}/{tap_name}"
 
-
-def verify_formula_online(version: str) -> None:
-    """Verify the formula is updated by checking with brew."""
-    print("\n== Verifying formula online ==")
-    
-    try:
-        tap_name = get_tap_name()
-    except Exception as e:
-        print(f"⚠️  Could not determine tap name: {e}", file=sys.stderr)
-        print("   Run manually: brew info specci")
-        return
-    
-    try:
-        # Update the tap first to get latest changes
-        print(f"Updating tap: {tap_name}")
-        run(["brew", "update", tap_name], check=False)
-        
-        # Get formula info
-        print(f"Checking formula version...")
-        run(["brew", "info", "specci"], capture_output=False, check=False)
-    except FileNotFoundError:
-        print("⚠️  'brew' command not found, skipping online verification")
-    except Exception as e:
-        print(f"⚠️  Error checking formula: {e}", file=sys.stderr)
-        print("   Run manually: brew info specci")
-
-
 def commit_and_push(version: str) -> None:
     print("\n== Committing and pushing changes ==")
     try:
@@ -127,8 +100,6 @@ def commit_and_push(version: str) -> None:
         sys.exit(e.returncode)
     else:
         print("✅ Changes committed and pushed.")
-        verify_formula_online(version)
-
 
 def main() -> None:
     parser = argparse.ArgumentParser(
