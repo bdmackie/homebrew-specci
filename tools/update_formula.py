@@ -34,7 +34,7 @@ def update_formula_ssh(version: str, formula_path: pathlib.Path | None = None) -
     # Replace sha256 line
     text = re.sub(
         r'tag: "[^"]+"',
-        f'tag: "{version}"',
+        f'tag: "v{version}"',
         text,
     )
 
