@@ -4,6 +4,12 @@ import subprocess
 import sys
 from pathlib import Path
 
+# Add tools directory to path for imports
+TOOLS_DIR = Path(__file__).resolve().parent
+sys.path.insert(0, str(TOOLS_DIR))
+
+from update_formula import update_formula as update_formula_func
+
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 FORMULA_PATH = REPO_ROOT / "Formula" / "specci.rb"
@@ -28,19 +34,16 @@ def ensure_formula_exists() -> None:
 
 
 def update_formula(version: str) -> None:
-    """Call the existing update_formula.py helper."""
+    """Update the formula using the imported function."""
     print(f"== Updating formula for version {version} ==")
     try:
-        run([sys.executable, "tools/update_formula.py", version])
-    except subprocess.CalledProcessError as e:
-        print("Error: update_formula.py failed.", file=sys.stderr)
-        if e.stdout:
-            print("--- stdout ---")
-            print(e.stdout)
-        if e.stderr:
-            print("--- stderr ---", file=sys.stderr)
-            print(e.stderr, file=sys.stderr)
-        sys.exit(e.returncode)
+        update_formula_func(version, FORMULA_PATH)
+    except SystemExit as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+    except Exception as e:
+        print(f"Error: Failed to update formula: {e}", file=sys.stderr)
+        sys.exit(1)
 
 
 def show_diff() -> None:
