@@ -4,8 +4,9 @@ class GitHubApiDownloadStrategy < CurlDownloadStrategy
     token = ENV["SPECCI_CLIENT_GITHUB_TOKEN"] || ENV["HOMEBREW_GITHUB_API_TOKEN"]
     if token
       ohai "Using GitHub token for authentication"
-      # Use curl_download with token header
-      curl_download url, to: cached_location, args: ["-H", "Authorization: Bearer #{token}"]
+      # Download with curl and Authorization header
+      system "curl", "-f", "-L", "-H", "Authorization: Bearer #{token}", url, "-o", cached_location
+      raise "Download failed" unless $CHILD_STATUS.success?
     else
       super(timeout: timeout, **options)
     end
