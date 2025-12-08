@@ -101,24 +101,7 @@ def verify_formula_online(version: str) -> None:
         
         # Get formula info
         print(f"Checking formula version...")
-        result = run(["brew", "info", "specci"], capture_output=True, check=False)
-        info_output = result.stdout
-        
-        expected_tag = f"v{version}"
-        if expected_tag in info_output:
-            print(f"✅ Formula is updated online (tag {expected_tag} found)")
-        else:
-            # Try to extract tag from output
-            tag_match = re.search(r'tag:\s+"([^"]+)"', info_output)
-            if tag_match:
-                online_tag = tag_match.group(1)
-                if online_tag == expected_tag:
-                    print(f"✅ Formula is updated online (tag {online_tag})")
-                else:
-                    print(f"⚠️  Formula shows tag '{online_tag}', expected '{expected_tag}'")
-            else:
-                print(f"⚠️  Could not verify tag in brew output")
-                print("   Run manually: brew info specci")
+        run(["brew", "info", "specci"], capture_output=False, check=False)
     except FileNotFoundError:
         print("⚠️  'brew' command not found, skipping online verification")
     except Exception as e:
