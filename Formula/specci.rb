@@ -10,8 +10,8 @@ class Specci < Formula
   homepage "https://github.com/bdmackie/specci-client"
 
   # These two lines are replaced per release using the data from the Python script
-  url "https://api.github.com/repos/bdmackie/specci-client/tarball/v0.1.0"
-  sha256 "d444cb32aa12a70cea96c75afe7ff3061ff3a1eaa478ad3b467fb04e24f51981"
+  url "https://api.github.com/repos/bdmackie/specci-client/tarball/v0.1.2"
+  sha256 "4942f649df6073eb1e3305234141cf6b1e3ff23e8dd7f8c29c83f0b58f33a2f6"
 
   # License identifier
   license "Proprietary"
