@@ -9,7 +9,7 @@ from pathlib import Path
 TOOLS_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(TOOLS_DIR))
 
-from update_formula import update_formula_https as update_formula_func
+from update_formula import update_formula_ssh as update_formula_func
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
