@@ -1,11 +1,11 @@
 # Custom download strategy for GitHub API with token support
-class GitHubApiDownloadStrategy < AbstractDownloadStrategy
-  def fetch(timeout: nil, **options)
+class GitHubApiDownloadStrategy < CurlDownloadStrategy
+  def curl(*args, **options)
     token = ENV["SPECCI_CLIENT_GITHUB_TOKEN"] || ENV["HOMEBREW_GITHUB_API_TOKEN"]
-    curl_args = []
-    curl_args += ["-H", "Authorization: Bearer #{token}"] if token
-    
-    curl_download(url, **options.merge(args: curl_args))
+    if token
+      args = args + ["-H", "Authorization: Bearer #{token}"]
+    end
+    super(*args, **options)
   end
 end
 
